@@ -16,7 +16,7 @@
  In this case, i use hostpath for store data of database (in production, you)
 
 	cd deploy/ansible
-	ansible-playbook *.yaml
+	ansible-playbook main.yml
 
 
 * Install Prometheus + Grafana for monitoring 

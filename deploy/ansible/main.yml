@@ -1,0 +1,84 @@
+- name: Deploy Application to Kubernetes
+  hosts: localhost
+  tasks:
+    - name: Web node deploy
+      k8s:
+        definition:
+          apiVersion: apps/v1
+          kind: Deployment
+          metadata:
+            namespace: default
+            name: my-app
+          spec:
+            replicas: 2
+            selector:
+              matchLabels:
+                app: my-app
+            template:
+              metadata:
+                labels:
+                  app: my-app
+              spec:
+                containers:
+                  - name: my-app
+                    image: hoanghp/web-nodejs
+                    ports:
+                      - containerPort: 3000
+    - name: Services my app
+      k8s:
+        definition:
+          apiVersion: v1
+          kind: Service
+          metadata:
+            namespace: default
+            name: my-app
+          spec:
+            selector:
+              app: my-app
+            ports:
+              - protocol: TCP
+                port: 80
+                targetPort: 3000
+    - name: app python deploy
+      k8s:
+        definition:
+          apiVersion: apps/v1
+          kind: Deployment
+          metadata:
+            namespace: default
+            name: app-python
+          spec:
+            replicas: 2
+            selector:
+              matchLabels:
+                app: app-python
+            template:
+              metadata:
+                labels:
+                  app: app-python
+              spec:
+                containers:
+                  - name: app-python
+                    image: hoanghp/app-python
+                    ports:
+                      - containerPort: 5000
+
+    - name: Services app python
+      k8s:
+        definition:
+          apiVersion: v1
+          kind: Service
+          metadata:
+            namespace: default
+            name: app-python
+          spec:
+            selector:
+              app: app-python
+            ports:
+              - protocol: TCP
+                port: 80
+                targetPort: 5000
+    - name: Apply MySQL manifest
+      k8s:
+        state: present
+        src: mysql.yaml

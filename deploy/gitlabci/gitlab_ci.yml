@@ -1,0 +1,50 @@
+variables:
+  deployment: "homework"
+  image: "hoanghp/${CI_PROJECT_NAME}:${CI_COMMIT_TAG}_${CI_COMMIT_SHORT_SHA}"
+  namespace: "default"
+
+image: docker
+services:
+  - docker
+stages:
+  - buildandpush
+  - sonarqube-check
+  - deploy
+buildandpush:
+  stage: buildandpush
+  before_script:
+    - docker login -u ${CI_REGISTRY_USER} -p ${CI_REGISTRY_PASSWORD} ${CI_REGISTRY}
+  allow_failure: false
+  variables:
+    GIT_STRATEGY: clone
+  tags:
+    - runner01
+  script:
+    - docker build -t ${image} .
+    - docker push ${image}
+  only:
+    - tags
+
+sonarqube-check:
+  stage: sonarqube-check
+  variables:
+    GIT_STRATEGY: none
+  allow_failure: false
+  tags:
+    - runer01
+  script:
+    - sona.sh
+  only:
+    - tags
+
+deployk8s:
+  stage: deployk8s
+  variables:
+    GIT_STRATEGY: none
+  tags:
+    - runner01
+  script:
+    - kubectl set image deployment/"$deployment" "$deployment"="$image" -n "$namespace"
+  only:
+    - tags
+

@@ -40,4 +40,4 @@ helm install monitoring prometheus-community/kube-prometheus-stack
     + Method 1: increate replication 1 to N in deployment file
     + Method 2: use HPA
   - Sever scale: add node to kubernetes cluster
-  
+<b>NOTE</b>

@@ -14,7 +14,9 @@
 * services 
  - PRD: deploy database on kubernetes not good idea. If you can, we can deploy replication/ clusters architect (cluster/percona/mariadb ...).
  In this case, i use hostpath for store data of database (in production, you)
-ansible-playbook *.yaml
+
+	cd deploy/ansible
+	ansible-playbook *.yaml
 
 
 * Install Prometheus + Grafana for monitoring 

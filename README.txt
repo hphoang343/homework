@@ -13,7 +13,7 @@
 ================= install =============
 * services 
  - PRD: deploy database on kubernetes not good idea. If you can, we can deploy replication/ clusters architect (cluster/percona/mariadb ...).
- In this case, i use hostpath for store data of database (in production, you)
+ In this case, i use hostpath for store data of database (in production, you need NFS server/ SAN)
 
 	cd deploy/ansible
 	ansible-playbook main.yml
